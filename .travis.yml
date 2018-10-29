@@ -7,7 +7,7 @@ otp_release:
   - 18.3
 before_script:
   - rebar get-deps
-script: rebar compile eunit
+script: rebar compile && rebar eunit -v
 after_script:
   - rebar clean
 branches:
