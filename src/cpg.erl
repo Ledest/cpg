@@ -2695,15 +2695,14 @@ handle_call({join_counts, Counts, Pid} = Request, _, State0) ->
 
 handle_call({leave, Pid} = Request, _,
             #state{monitors = Monitors} = State) ->
-    case maps:take(Pid, Monitors) of
-        {#state_monitor{monitor = MonitorRef,
-                        names = GroupNameList}, MonitorsNew} ->
+    case maps:find(Pid, Monitors) of
+        {ok, #state_monitor{monitor = MonitorRef, names = GroupNameList}} ->
             true = is_reference(MonitorRef),
             true = erlang:demonitor(MonitorRef, [flush]),
             abcast_hidden_nodes(Request, State),
             {reply, ok,
              leave_all_local(GroupNameList, Pid, leave_local,
-                             State#state{monitors = MonitorsNew})};
+                             State#state{monitors = maps:remove(Pid, Monitors)})};
         error ->
             {reply, error, State}
     end;
@@ -2941,14 +2940,13 @@ handle_cast({join_counts, Counts, Pid}, State0) ->
 
 handle_cast({leave, Pid},
             #state{monitors = Monitors} = State) ->
-    case maps:take(Pid, Monitors) of
-        {#state_monitor{monitor = MonitorProcess,
-                        names = GroupNameList}, MonitorsNew} ->
+    case maps:find(Pid, Monitors) of
+        {ok, #state_monitor{monitor = MonitorProcess, names = GroupNameList}} ->
             true = is_pid(MonitorProcess),
             ok = cpg_node_monitor:remove(MonitorProcess, Pid),
             {noreply,
              leave_all_remote(GroupNameList, Pid, leave_remote,
-                              State#state{monitors = MonitorsNew})};
+                              State#state{monitors = maps:remove(Pid, Monitors)})};
         error ->
             {noreply, State}
     end;
@@ -3653,10 +3651,10 @@ merge_start(Node,
 
 member_died_local(Pid, Reason,
                   #state{monitors = Monitors} = State) ->
-    case maps:take(Pid, Monitors) of
-        {#state_monitor{names = GroupNameList}, MonitorsNew} ->
+    case maps:find(Pid, Monitors) of
+        {ok, #state_monitor{names = GroupNameList}} ->
             leave_all_local(GroupNameList, Pid, Reason,
-                            State#state{monitors = MonitorsNew});
+                            State#state{monitors = maps:remove(Pid, Monitors)});
         error ->
             State
     end.
@@ -3665,9 +3663,9 @@ members_died_remote([], State) ->
     State;
 members_died_remote([{Pid, Reason} | PidReasons],
                     #state{monitors = Monitors} = State) ->
-    case maps:take(Pid, Monitors) of
-        {#state_monitor{names = GroupNameList}, MonitorsNew} ->
-            StateNew = State#state{monitors = MonitorsNew},
+    case maps:find(Pid, Monitors) of
+        {ok, #state_monitor{names = GroupNameList}} ->
+            StateNew = State#state{monitors = maps:remove(Pid, Monitors)},
             members_died_remote(PidReasons,
                                 leave_all_remote(GroupNameList,
                                                  Pid, Reason, StateNew));
@@ -3679,9 +3677,9 @@ node_died([], _, PidReasonsL, State) ->
     node_died_related(PidReasonsL, State);
 node_died([Pid | Pids], Reason, PidReasonsL,
           #state{monitors = Monitors} = State) ->
-    case maps:take(Pid, Monitors) of
-        {#state_monitor{names = GroupNameList}, MonitorsNew} ->
-            StateNew = State#state{monitors = MonitorsNew},
+    case maps:find(Pid, Monitors) of
+        {ok, #state_monitor{names = GroupNameList}} ->
+            StateNew = State#state{monitors = maps:remove(Pid, Monitors)},
             node_died(Pids, Reason, PidReasonsL,
                       leave_all_remote(GroupNameList,
                                        Pid, Reason, StateNew));
