@@ -1,0 +1,5 @@
+lists:keystore(edoc_opts, 1, CONFIG,
+               {edoc_opts,
+                lists:keystore(macros, 1, proplists:get_value(edoc_opts, CONFIG, []),
+                               {macros,
+                                [{list_to_atom("ERLANG_OTP_VERSION_" ++ erlang:system_info(otp_release)), true}]})}).
