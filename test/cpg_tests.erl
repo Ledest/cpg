@@ -40,7 +40,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 cpg_start_test() ->
-    ok = reltool_util:application_start(cpg),
+    {ok, _} = application:ensure_all_started(cpg),
     ok = application:start(sasl).
 
 via1_test() ->
@@ -374,7 +374,7 @@ pid_counts_test() ->
     ok.
 
 cpg_stop_test_() ->
-    {timeout, 10, ?_assertEqual(ok, reltool_util:application_stop(cpg))}.
+    {timeout, 10, ?_assertEqual(ok, application:stop(cpg))}.
 
 busy_pid() ->
     timer:sleep(1000),

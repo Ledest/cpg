@@ -92,7 +92,7 @@ provides a dict module interface
 
     $ erl -sname cpg@localhost -pz ebin/ -pz deps/*/ebin/
     
-    (cpg@localhost)1> reltool_util:application_start(cpg).
+    (cpg@localhost)1> application:ensure_all_started(cpg).
     ok
     (cpg@localhost)2> cpg:join(groups_scope1, "Hello", self()).
     ok

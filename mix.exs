@@ -46,8 +46,7 @@ defmodule CPG.Mixfile do
   end
 
   defp deps do
-    [{:trie, ">= 1.8.0"},
-     {:reltool_util, ">= 1.8.0"}]
+    [{:trie, ">= 1.8.0"}]
   end
 
   defp description do
