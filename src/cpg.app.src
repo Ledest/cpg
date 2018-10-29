@@ -22,14 +22,13 @@
         groups_scope2
         ]},
    {applications, [
-        trie,
         stdlib,
         kernel
         ]},
    {mod, {cpg_app, []}},
    {env, [
         {node_type, visible}, % visible | all
-        {group_storage, trie}, % trie | dict | orddict | ...
+        {group_storage, dict}, % trie | dict | orddict | ...
         {scope, [
             % automatically created scopes to keep process groups separate
             % (each becomes a locally registered name)

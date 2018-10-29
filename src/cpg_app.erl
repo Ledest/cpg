@@ -79,7 +79,7 @@ group_storage() ->
         {ok, V} when is_atom(V) ->
             V;
         undefined ->
-            trie
+            dict
     end.
 
 %%%------------------------------------------------------------------------
