@@ -4,6 +4,7 @@ otp_release:
   - 21.3
   - 20.3
   - 19.3
+  - 18.3
 before_script:
   - rebar get-deps
 script: rebar compile eunit
