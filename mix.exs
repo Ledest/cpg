@@ -30,9 +30,7 @@ defmodule CPG.Mixfile do
   end
 
   def application do
-    [applications: [
-       :quickrand,
-       :trie],
+    [applications: [:trie],
      mod: {:cpg_app, []},
      registered: [
        :cpg_default_scope,
@@ -49,8 +47,7 @@ defmodule CPG.Mixfile do
 
   defp deps do
     [{:trie, ">= 1.8.0"},
-     {:reltool_util, ">= 1.8.0"},
-     {:quickrand, ">= 1.8.0"}]
+     {:reltool_util, ">= 1.8.0"}]
   end
 
   defp description do

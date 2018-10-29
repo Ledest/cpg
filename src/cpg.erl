@@ -2666,7 +2666,6 @@ init([Scope]) ->
     Listen = cpg_app:listen_type(),
     ok = monitor_nodes(true, Listen),
     ok = gather_groups(listen_nodes(Listen), Scope),
-    ok = quickrand:seed(),
     {ok, #state{scope = Scope,
                 groups = cpg_data:get_empty_groups(),
                 listen = Listen}}.
@@ -3739,7 +3738,7 @@ monitor_remote(Pid, PidNode, GroupName, MonitorsOld, NodeMonitorsOld) ->
 whereis_name_random(1, [Pid]) ->
     Pid;
 whereis_name_random(N, L) ->
-    lists:nth(random(N), L).
+    lists:nth(rand:uniform(N), L).
 
 count(Elem, List) ->
     count(List, 0, Elem).
@@ -3761,9 +3760,3 @@ delete_all(Elem, [Elem | T]) ->
     delete_all(Elem, T);
 delete_all(Elem, [H | T]) ->
     [H | delete_all(Elem, T)].
-
--compile({inline, [{random,1}]}).
-
-random(N) ->
-    quickrand:uniform(N).
-

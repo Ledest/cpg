@@ -22,7 +22,6 @@
         groups_scope2
         ]},
    {applications, [
-        quickrand,
         trie,
         stdlib,
         kernel

@@ -915,7 +915,7 @@ pick(1, [Pid], Pattern) ->
     {ok, Pattern, Pid};
 
 pick(N, L, Pattern) ->
-    Pid = lists:nth(random(N), L),
+    Pid = lists:nth(rand:uniform(N), L),
     {ok, Pattern, Pid}.
 
 pick_i(I, I, _, [], [], _, GroupName, _) ->
@@ -947,7 +947,7 @@ pick(0, [], _, GroupName, _) ->
     {error, {'no_process', GroupName}};
 
 pick(N, L, Exclude, GroupName, Pattern) ->
-    pick_i(1, random(N), 0, [], L, Exclude, GroupName, Pattern).
+    pick_i(1, rand:uniform(N), 0, [], L, Exclude, GroupName, Pattern).
 
 pick(0, [], N2, L2, Exclude, GroupName, Pattern) ->
     pick(N2, L2, Exclude, GroupName, Pattern);
@@ -1080,9 +1080,3 @@ history_remote_newest_pid([_ | History], Exclude, Node, GroupName, Pattern) ->
     history_remote_newest_pid(History, Exclude, Node, GroupName, Pattern).
 history_remote_newest([_ | _] = History, Exclude, GroupName, Pattern) ->
     history_remote_newest_pid(History, Exclude, node(), GroupName, Pattern).
-
--compile({inline, [{random,1}]}).
-
-random(N) ->
-    quickrand:uniform(N).
-
