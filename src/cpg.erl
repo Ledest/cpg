@@ -198,6 +198,17 @@
         names :: list(name())
     }).
 
+-ifdef(ERLANG_OTP_VERSION_18).
+-record(state,
+    {
+        scope :: scope(), % locally registered process name
+        groups :: cpg_data:state(), % GroupName -> #cpg_data{}
+        monitors = #{} :: #{pid() => #state_monitor{}},
+        node_monitors = #{} :: #{node() => cpg_node_monitor:process()},
+        callbacks = undefined :: undefined | pid(),
+        listen :: visible | all
+    }).
+-else.
 -record(state,
     {
         scope :: scope(), % locally registered process name
@@ -207,6 +218,7 @@
         callbacks = undefined :: undefined | pid(),
         listen :: visible | all
     }).
+-endif.
 
 -compile({inline,
           [{join_impl, 4},

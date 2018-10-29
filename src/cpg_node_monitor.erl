@@ -49,11 +49,19 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          code_change/3, terminate/2]).
 
+-ifdef(ERLANG_OTP_VERSION_18).
+-record(state,
+    {
+        parent :: pid(),
+        monitors :: #{pid() => reference()}
+    }).
+-else.
 -record(state,
     {
         parent :: pid(),
         monitors :: #{pid() := reference()}
     }).
+-endif.
 
 -type process() :: pid().
 -export_type([process/0]).
