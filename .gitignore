@@ -1,3 +1,6 @@
+/ebin
+/doc
+/.rebar
 .eunit
 deps
 priv
