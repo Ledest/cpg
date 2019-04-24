@@ -55,6 +55,8 @@
 -include("cpg_logging.hrl").
 
 % for features specific to Erlang/OTP version 21.x (and later versions)
+-ifdef(ERLANG_OTP_VERSION_18).
+-else.
 -ifdef(ERLANG_OTP_VERSION_19).
 -else.
 -ifdef(ERLANG_OTP_VERSION_20).
@@ -63,6 +65,7 @@
 -define(ERLANG_OTP_VERSION_21_FEATURES, true).
 -else.
 -error("Erlang/OTP version invalid").
+-endif.
 -endif.
 -endif.
 -endif.
